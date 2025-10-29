@@ -1,0 +1,27 @@
+# Archivos de compilación
+/target/
+*.jar
+*.war
+*.class
+
+# Archivos de configuración de Eclipse/STS
+.metadata/
+.classpath
+.project
+.settings/
+
+# Archivos temporales
+bin/
+*.log
+*.tmp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de IntelliJ
+.idea/
+*.iml
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar

@@ -1,0 +1,50 @@
+package com.proyecto.controller;
+
+import com.proyecto.model.Producto;
+import com.proyecto.service.ProductoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/productos")
+public class ProductoController {
+    @Autowired
+    private ProductoService service;
+
+    @GetMapping
+    public List<Producto> listar(){ return service.listar(); }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Producto> getPorId(@PathVariable Long id){
+        return service.obtener(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Producto> crear(@RequestBody Producto p){
+        Producto creado = service.guardar(p);
+        return ResponseEntity.status(201).body(creado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto p){
+        if(service.obtener(id).isEmpty()) return ResponseEntity.notFound().build();
+        Producto actualizado = service.actualizar(id, p);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
+        boolean eliminado = service.eliminarProducto(id); 
+        if(eliminado){
+            return ResponseEntity.ok().body("Producto eliminado correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
+        }
+    }
+
+}
